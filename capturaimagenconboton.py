@@ -7,7 +7,7 @@ import os
 import gc
 
 # Configuración
-LABEL = "nocascodificil" #Nombre de la carpeta donde se guardan las imagenes
+LABEL = "casco" #Nombre de la carpeta donde se guardan las imagenes
 PIXFORMAT = sensor.GRAYSCALE
 FRAMESIZE = sensor.QVGA #Tamaño de la imagen (QVGA=320x240)
 BUTTON_PIN = "D14" #Pin de la portenta donde está conectado el botón
@@ -23,7 +23,7 @@ led = machine.LED("LED_BLUE")
 led.off()
 
 # Botón
-button = machine.Pin(BUTTON_PIN, machine.Pin.IN, machine.Pin.PULL_UP)
+button = machine.Pin(BUTTON_PIN, machine.Pin.IN, machine.Pin.PULL_UP)  # Botón con resistencia pull-down
 index = 0
 
 # Crear carpeta si no existe
@@ -37,7 +37,7 @@ while True:
     img = sensor.snapshot()
     #print("%d" % (button.value()))  # Muestra el estado del botón
 
-    if button.value() == 1:  # pulsado
+    if button.value() == 0:  # pulsado
         timestamp = time.ticks_ms()
         filename = "%s/img-%d_%d.jpg" % (LABEL, index, timestamp)
         img.save(filename)
