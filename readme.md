@@ -9,7 +9,7 @@ Para ello, se ha implementado un sistema sencillo en la **Portenta H7** que, med
 
 ## Conexión del botón
 
-El siguiente esquema muestra cómo conectar el botón a la Portenta:
+El siguiente esquema muestra cómo conectar el botón a la Portenta usando la resistencia interna de la Portenta con **PULL_UP**:
 
 ![Esquema conexión](conexion_capturaconboton_bb.jpg)
 
