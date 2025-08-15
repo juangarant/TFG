@@ -44,9 +44,15 @@ def paridad_ok(dato: int) -> bool:
     # 12 bits intermedios bajos:  bits 12..1  -> desplazamos 1 y tomamos 12 bits
     cadena2 = (dato >> 1) & 0xFFF
 
-    # En W26 estándar: primer bit = paridad PAR de la mitad alta, último bit = paridad IMPAR de la mitad baja
-    parity1_ok = (cuenta_unos(cadena1) % 2 == 0) == parity1
-    parity2_ok = (cuenta_unos(cadena2) % 2 == 1) == parity2
+    # En W26 estándar:
+    #  - primer bit = paridad **par** de la mitad alta -> debe ser 1 si los 12 bits tienen #impares
+    #  - último bit = paridad **impar** de la mitad baja -> debe ser 1 si los 12 bits tienen #pares
+
+    # Paridad par: el bit de paridad es igual al número de unos módulo 2
+    parity1_ok = parity1 == (cuenta_unos(cadena1) % 2 == 1)
+    # Paridad impar: el bit de paridad es el opuesto al número de unos módulo 2
+    parity2_ok = parity2 == (cuenta_unos(cadena2) % 2 == 0)
+
     return parity1_ok and parity2_ok
 
 
