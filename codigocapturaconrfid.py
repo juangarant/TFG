@@ -15,11 +15,11 @@ from ml.utils import NMS
 
 # Tarjetas autorizadas (puedes usar RAW completo o (site_code, user_code))
 AUTHORIZED_RAW26 = {
-    23098353: "Operario_A"  # Ejemplo si quieres usar RAW decimal
+    #23098353: "Operario_A"  # Ejemplo si quieres usar RAW decimal
 }
 
 AUTHORIZED_TUPLES = {
-    # (148, 19828): "Operario_A"  # Ejemplo (site_code, user_code)
+    (148, 19828): "Operario_A"  # Ejemplo (site_code, user_code)
 }
 
 # Umbral de confianza

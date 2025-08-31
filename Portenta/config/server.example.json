@@ -1,0 +1,5 @@
+{
+  "function_url": "<events-function>",
+  "cards_url": "<cards-function>",
+  "edge_api_key": "<edge-api-key>"
+}
