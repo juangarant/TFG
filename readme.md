@@ -20,7 +20,7 @@ El prototipo se ha desarrollado sobre una placa Arduino Portenta H7 con Vision S
 ## Arquitectura general
 
 <p align="center">
-  <img src="diagrama_general.jpg" alt="Diagrama general" width="600"/>
+  <img src="diagrama_general.png" alt="Diagrama general" width="600"/>
 </p>
 
 El sistema se organiza en dos bloques principales:
