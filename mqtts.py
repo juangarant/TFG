@@ -2,8 +2,8 @@ import network, time
 from umqtt_simple import MQTTClient
 import ssl
 
-SSID = "MiFibra-69F5H"
-PASSWORD = "Vr7boyYk"
+SSID = "XXX"
+PASSWORD = "XXX"
 
 MQTT_BROKER = "uf867860.ala.eu-central-1.emqxsl.com"
 MQTT_PORT   = 8883
