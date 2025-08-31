@@ -1,4 +1,4 @@
-# Sistema de supervisión de EPIs en entornos industriales
+# Reconocimiento en tiempo real de equipos de protección individual mediante Tiny Machine Learning en dispositivos Internet of Things
 
 Este proyecto corresponde al Trabajo de Fin de Grado en la Universitat Politècnica de València.  
 El objetivo es implementar un sistema autónomo de control de accesos que verifique en tiempo real si un operario lleva el casco de seguridad antes de entrar en zonas de riesgo.
