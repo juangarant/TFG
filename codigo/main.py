@@ -1,13 +1,15 @@
-"""
-Portenta H7 + Vision Shield — control de acceso con casco/no-casco.
-Notas:
- - Modelo .tflite y labels se cargan desde /model en la SD.
- - Los logs se guardan en /data y se sincronizan bajo demanda.
- - Wiegand-26 por interrupciones en D13/D14.
-TODO:
- - Pasar a cerradura real (relé).
- - Logging persistente si se desactiva DEBUG.
-"""
+# main.py — Portenta H7 + Vision Shield
+# - Wiegand-26 (RFID)
+# - FOMO (casco / nocasco)
+# - CSV + fotos en SD
+# - Subida a Supabase (upload-month)
+# - Auto-actualiza ACL (cards.csv) desde Supabase (cards-manifest)
+#
+# Requisitos en / (raíz SD):
+#   /config/server.json   -> { function_url, cards_url, edge_api_key }
+#   /config/cards.csv
+#   /data/, /media/, /model/
+#   storage_local.py, cloud_sync.py, cards_sync.py, wifi_setup.py (opcional)
 
 from machine import Pin
 import time, math, uos, gc
@@ -63,7 +65,7 @@ def led_show(color="blue", duration_ms=800):
     _led_all_off()
 
 # =========================
-# Inferencia
+# FOMO / inferencia
 # =========================
 MIN_CONFIDENCE     = 0.40
 MAX_FRAMES_CHECK   = 8
@@ -75,6 +77,7 @@ EARLY_STOP_ON_HIT  = True
 D0_PIN = "D14"
 D1_PIN = "D13"
 TIMEOUT_MS = 50
+ANTIREBOTE_MS = 800
 
 CARD_COOLDOWN_MS      = 6000
 EVENT_DEDUP_WINDOW_MS = 6000
@@ -172,7 +175,7 @@ try:
     IDX_CASCO   = labels.index('casco')
     IDX_NOCASCO = labels.index('nocasco')
 except ValueError:
-    raise RuntimeError("labels.txt debe contener 'casco' y 'nocasco'.")
+    raise RuntimeError("labels.txt debe contener 'casco' y 'nocasco' (además de 'background').")
 
 threshold_list = [(int(MIN_CONFIDENCE * 255 + 0.5), 255)]
 
@@ -222,10 +225,11 @@ def decide_helmet(MAX_FRAMES=8, EARLY_STOP=True):
         if EARLY_STOP and (tot_casco >= 2 and tot_casco > tot_nocasco) and best_casco >= MIN_CONFIDENCE: break
         if EARLY_STOP and (tot_nocasco >= 2 and tot_nocasco > tot_casco) and best_nocasco >= MIN_CONFIDENCE: break
     if (tot_casco == 0 and tot_nocasco == 0):
-        return (best_casco >= best_nocasco), max(best_casco, best_nocasco)
+        return (False, 0.0)  # fallback seguro: NO CASCO
     if tot_casco != tot_nocasco:
         return (tot_casco > tot_nocasco), (best_casco if tot_casco > tot_nocasco else best_nocasco)
-    return (best_casco >= best_nocasco), max(best_casco, best_nocasco)
+    return (best_casco > best_nocasco), max(best_casco, best_nocasco)  # empates -> NO CASCO
+
 
 # =========================
 # Sync a la nube (CSV mensual)
